@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Param Enterprises — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #f7e8e8;
+  --rose:     #c47d7d;
+  --rose-d:   #9e5a5a;
+  --text:     #5a3a3a;
+  --text-2:   #9e7a7a;
+  --white:    #fff9f9;
+  --silk:     #e8bfbf;
+  --card:     rgba(255,249,249,0.72);
+  --border:   rgba(255,255,255,0.75);
+  --shadow:   rgba(160,90,90,0.14);
+  --btn-grad: linear-gradient(135deg,#d49090,#c47d7d,#b06060);
+  --div-line: rgba(196,125,125,0.25);
+}
+
+[data-theme="dark"]{
+  --bg:       #111213;
+  --rose:     #d4957a;
+  --rose-d:   #c07a60;
+  --text:     #e8ddd8;
+  --text-2:   #9a8a80;
+  --white:    #f0ebe6;
+  --silk:     #3a3230;
+  --card:     rgba(22,24,26,0.82);
+  --border:   rgba(255,255,255,0.06);
+  --shadow:   rgba(0,0,0,0.55);
+  --btn-grad: linear-gradient(135deg,#c07a60,#b06048,#8a3a28);
+  --div-line: rgba(212,149,122,0.18);
+}
+
+html,body{height:100%;}
+
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  transition:background 0.5s,color 0.4s;
+  overflow:hidden;
+}
+
+/* silk texture */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,0.18) 40px,rgba(255,255,255,0.18) 41px),
+    repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.12) 40px,rgba(255,255,255,0.12) 41px);
+  transition:opacity 0.5s;
+}
+/* blobs */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(255,200,200,0.45) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(230,160,160,0.30) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 55% 20%,rgba(255,230,230,0.50) 0%,transparent 60%);
+  transition:opacity 0.5s;
+}
+[data-theme="dark"] body::before{opacity:0.15;}
+[data-theme="dark"] body::after{
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(180,100,60,0.14) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(120,70,40,0.12) 0%,transparent 65%);
+}
+
+/* metal grid in dark */
+.bg-metal{
+  position:fixed;inset:0;pointer-events:none;opacity:0;
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.025) 60px,rgba(255,255,255,0.025) 61px),
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,0.025) 60px,rgba(255,255,255,0.025) 61px);
+  transition:opacity 0.5s;
+}
+[data-theme="dark"] .bg-metal{opacity:1;}
+
+/* dark mode toggle */
+.toggle-wrap{
+  position:fixed;top:22px;right:24px;z-index:100;
+  display:flex;align-items:center;gap:10px;
+}
+.toggle-label{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);font-weight:300;transition:color 0.3s;user-select:none;}
+.toggle-track{
+  width:44px;height:24px;border-radius:12px;
+  background:rgba(196,125,125,0.18);
+  border:1px solid rgba(196,125,125,0.30);
+  position:relative;cursor:pointer;
+  transition:background 0.35s,border-color 0.35s;flex-shrink:0;
+}
+.toggle-track:hover{border-color:var(--rose);}
+.toggle-knob{
+  position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--rose);
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+[data-theme="dark"] .toggle-knob{transform:translateX(20px);}
+[data-theme="dark"] .toggle-track{background:rgba(212,149,122,0.25);}
+
+/* card */
+.card{
+  position:relative;z-index:10;
+  background:var(--card);
+  backdrop-filter:blur(24px) saturate(1.5);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:64px 56px 56px;
+  width:480px;max-width:calc(100vw - 32px);
+  text-align:center;
+  box-shadow:0 32px 80px var(--shadow),0 8px 24px rgba(0,0,0,0.06);
+  animation:rise 0.8s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(28px) scale(0.97);}
+  to  {opacity:1;transform:translateY(0)    scale(1);   }
+}
+
+/* spinning cog */
+.spinner-wrap{
+  width:72px;height:72px;margin:0 auto 32px;position:relative;
+}
+.spinner-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--rose);
+  border-right-color:var(--silk);
+  animation:spin 1.4s linear infinite;
+}
+.spinner-ring-2{
+  position:absolute;inset:10px;border-radius:50%;
+  border:1.5px solid transparent;
+  border-bottom-color:var(--rose);
+  opacity:0.5;
+  animation:spin 2s linear infinite reverse;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner-core{
+  position:absolute;inset:18px;border-radius:50%;
+  background:var(--btn-grad);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px var(--shadow);
+}
+.spinner-core svg{
+  width:16px;height:16px;stroke:var(--white);fill:none;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+
+.eyebrow{
+  font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--rose);font-weight:300;margin-bottom:14px;
+}
+.title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;font-size:2.2rem;
+  color:var(--text);letter-spacing:0.03em;line-height:1.15;
+  margin-bottom:12px;
+}
+.title em{font-style:italic;color:var(--rose);}
+
+.subtitle{
+  font-size:0.82rem;font-weight:300;
+  color:var(--text-2);letter-spacing:0.05em;
+  line-height:1.8;margin-bottom:36px;
+}
+
+/* animated dots */
+.dots span{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--rose);margin:0 3px;opacity:0.3;
+  animation:bounce 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2){animation-delay:0.2s;}
+.dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{
+  0%,80%,100%{opacity:0.25;transform:translateY(0);}
+  40%{opacity:1;transform:translateY(-6px);}
+}
+
+.divider{
+  display:flex;align-items:center;gap:14px;
+  margin:32px 0 28px;
+}
+.divider span{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--div-line),transparent);}
+.divider i{width:5px;height:5px;border-radius:50%;background:var(--rose);opacity:0.4;font-style:normal;}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;
+  background:transparent;
+  border:1px solid var(--div-line);
+  border-radius:12px;
+  font-family:'Jost',sans-serif;
+  font-size:0.75rem;font-weight:300;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-2);cursor:pointer;
+  text-decoration:none;
+  transition:border-color 0.2s,color 0.2s,background 0.2s;
+}
+.back-btn:hover{border-color:var(--rose);color:var(--rose);background:rgba(196,125,125,0.06);}
+.back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+.footer-note{
+  margin-top:22px;font-size:0.65rem;
+  color:var(--text-2);letter-spacing:0.08em;opacity:0.7;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-metal"></div>
+
+<!-- Dark mode toggle -->
+<div class="toggle-wrap">
+  <span class="toggle-label" id="toggle-lbl">Light</span>
+  <div class="toggle-track" id="toggle-track" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle dark mode">
+    <div class="toggle-knob"></div>
+  </div>
+</div>
+
+<div class="card">
+
+  <div class="spinner-wrap">
+    <div class="spinner-ring"></div>
+    <div class="spinner-ring-2"></div>
+    <div class="spinner-core">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </div>
+  </div>
+
+  <p class="eyebrow">Param Enterprises</p>
+
+  <h1 class="title">Under <em>Process</em></h1>
+
+  <p class="subtitle">
+    We're building something extraordinary for you.<br>
+    This page will be ready very soon.
+  </p>
+
+  <div class="dots">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="divider"><span></span><i></i><span></span></div>
+
+  <a href="index.html" class="back-btn">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Login
+  </a>
+
+  <p class="footer-note">Secure · Trusted · Private</p>
+
+</div>
+
+<script>
+  // Sync dark mode from login page if passed via URL param
+  const params = new URLSearchParams(window.location.search);
+  const html   = document.documentElement;
+  const track  = document.getElementById('toggle-track');
+  const lbl    = document.getElementById('toggle-lbl');
+  let dark     = params.get('theme') === 'dark';
+
+  function setTheme(d){
+    dark = d;
+    html.setAttribute('data-theme', d ? 'dark' : 'light');
+    lbl.textContent = d ? 'Dark' : 'Light';
+    track.setAttribute('aria-checked', String(d));
+  }
+  setTheme(dark);
+
+  track.addEventListener('click', () => setTheme(!dark));
+  track.addEventListener('keydown', e => {
+    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); setTheme(!dark); }
+  });
+</script>
+</body>
+</html>
