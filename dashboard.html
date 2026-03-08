@@ -1570,7 +1570,7 @@ html,body{min-height:100%;font-family:'Jost',sans-serif;background:var(--bg);col
   const html  = document.documentElement;
   const track = document.getElementById('toggle-track');
   const lbl   = document.getElementById('toggle-lbl');
-  let dark    = new URLSearchParams(window.location.search).get('theme') === 'dark';
+  let dark    = (sessionStorage.getItem('pe_theme') || 'light') === 'dark';
 
   function setTheme(d){
     dark = d;
@@ -1583,16 +1583,15 @@ html,body{min-height:100%;font-family:'Jost',sans-serif;background:var(--bg);col
   track.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){e.preventDefault();setTheme(!dark);} });
 
   /* ── Pull email from URL or use placeholder ── */
-  const params     = new URLSearchParams(window.location.search);
-  const emailParam = params.get('email');
-  const emailEl    = document.getElementById('display-email');
-  const initEl     = document.getElementById('avatar-initials');
-  if(emailParam && emailParam.length > 0){
-    emailEl.textContent  = decodeURIComponent(emailParam);
-    initEl.textContent   = decodeURIComponent(emailParam)[0].toUpperCase();
+  const emailEl  = document.getElementById('display-email');
+  const initEl   = document.getElementById('avatar-initials');
+  const savedEmail = sessionStorage.getItem('pe_user_email');
+  if(savedEmail && savedEmail.length > 0){
+    emailEl.textContent = savedEmail;
+    initEl.textContent  = savedEmail[0].toUpperCase();
   } else {
-    emailEl.textContent  = 'No email found';
-    initEl.textContent   = '?';
+    emailEl.textContent = 'Guest User';
+    initEl.textContent  = 'G';
   }
 
   /* ── Random ID ── */
