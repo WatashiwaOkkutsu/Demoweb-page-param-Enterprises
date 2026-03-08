@@ -1,0 +1,769 @@
+<!-- v3.0 -->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Param Enterprises</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ══════════════════════════════════════════
+   THEME TOKENS
+══════════════════════════════════════════ */
+:root{
+  --bg:          #f7e8e8;
+  --bg2:         #f0d4d4;
+  --card:        rgba(255,249,249,0.72);
+  --card-border: rgba(255,255,255,0.75);
+  --rose:        #c47d7d;
+  --rose-d:      #9e5a5a;
+  --rose-dd:     #b06060;
+  --silk:        #e8bfbf;
+  --text:        #5a3a3a;
+  --text-2:      #9e7a7a;
+  --white:       #fff9f9;
+  --input-bg:    rgba(247,232,232,0.45);
+  --input-b:     rgba(196,125,125,0.22);
+  --btn-grad:    linear-gradient(135deg,#d49090,#c47d7d,#b06060);
+  --shadow1:     rgba(160,90,90,0.14);
+  --shadow2:     rgba(160,90,90,0.08);
+  --chk-bg:      rgba(247,232,232,0.5);
+  --chk-b:       rgba(196,125,125,0.45);
+  --alt-bg:      rgba(255,249,249,0.6);
+  --alt-b:       rgba(196,125,125,0.22);
+  --alt-b-h:     rgba(196,125,125,0.40);
+  --alt-bg-h:    rgba(255,255,255,0.85);
+  --div-line:    rgba(196,125,125,0.25);
+  --err:         #b05050;
+  --valid:       #8abf8a;
+  --toggle-bg:   rgba(196,125,125,0.18);
+  --toggle-knob: var(--rose);
+  --accent-line: rgba(196,125,125,0.30);
+  --hero-sub:    rgba(90,58,58,0.55);
+}
+
+[data-theme="dark"]{
+  --bg:          #111213;
+  --bg2:         #1a1c1e;
+  --card:        rgba(22,24,26,0.82);
+  --card-border: rgba(255,255,255,0.06);
+  --rose:        #d4957a;
+  --rose-d:      #c07a60;
+  --rose-dd:     #b06845;
+  --silk:        #3a3230;
+  --text:        #e8ddd8;
+  --text-2:      #9a8a80;
+  --white:       #f0ebe6;
+  --input-bg:    rgba(255,255,255,0.04);
+  --input-b:     rgba(212,149,122,0.18);
+  --btn-grad:    linear-gradient(135deg,#c07a60,#b06048,#8a3a28);
+  --shadow1:     rgba(0,0,0,0.55);
+  --shadow2:     rgba(0,0,0,0.35);
+  --chk-bg:      rgba(255,255,255,0.05);
+  --chk-b:       rgba(212,149,122,0.35);
+  --alt-bg:      rgba(255,255,255,0.03);
+  --alt-b:       rgba(212,149,122,0.15);
+  --alt-b-h:     rgba(212,149,122,0.35);
+  --alt-bg-h:    rgba(255,255,255,0.07);
+  --div-line:    rgba(212,149,122,0.18);
+  --err:         #e07060;
+  --valid:       #70a870;
+  --toggle-bg:   rgba(212,149,122,0.22);
+  --toggle-knob: var(--rose);
+  --accent-line: rgba(212,149,122,0.22);
+  --hero-sub:    rgba(232,221,216,0.45);
+}
+
+html,body{height:100%}
+
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background 0.5s,color 0.4s;
+  overflow-x:hidden;
+}
+
+/* ══════════════════════════════════════════
+   BACKGROUND TEXTURES
+══════════════════════════════════════════ */
+.bg-layer{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  transition:opacity 0.5s;
+}
+
+/* light: silk weave */
+.bg-silk{
+  background:
+    repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,0.18) 40px,rgba(255,255,255,0.18) 41px),
+    repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.12) 40px,rgba(255,255,255,0.12) 41px);
+}
+.bg-blobs{
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(255,200,200,0.45) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(230,160,160,0.30) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 55% 20%,rgba(255,230,230,0.50) 0%,transparent 60%);
+}
+
+/* dark: brushed-metal grid */
+.bg-metal{
+  opacity:0;
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.025) 60px,rgba(255,255,255,0.025) 61px),
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,0.025) 60px,rgba(255,255,255,0.025) 61px),
+    repeating-linear-gradient(135deg,transparent,transparent 3px,rgba(255,255,255,0.012) 3px,rgba(255,255,255,0.012) 4px);
+}
+.bg-metal-glow{
+  opacity:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 20%,rgba(180,100,60,0.14) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 85% 80%,rgba(120,70,40,0.12) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 30% at 50% 50%,rgba(200,120,70,0.06) 0%,transparent 60%);
+}
+
+[data-theme="dark"] .bg-silk{ opacity:0; }
+[data-theme="dark"] .bg-blobs{ opacity:0; }
+[data-theme="dark"] .bg-metal{ opacity:1; }
+[data-theme="dark"] .bg-metal-glow{ opacity:1; }
+[data-theme="light"] .bg-metal{ opacity:0; }
+[data-theme="light"] .bg-metal-glow{ opacity:0; }
+[data-theme="light"] .bg-silk{ opacity:1; }
+[data-theme="light"] .bg-blobs{ opacity:1; }
+
+/* ══════════════════════════════════════════
+   DARK MODE TOGGLE — top-right
+══════════════════════════════════════════ */
+.toggle-wrap{
+  position:fixed;top:22px;right:24px;z-index:100;
+  display:flex;align-items:center;gap:10px;
+}
+.toggle-label{
+  font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-2);font-weight:300;transition:color 0.3s;
+  user-select:none;
+}
+.toggle-track{
+  width:44px;height:24px;border-radius:12px;
+  background:var(--toggle-bg);
+  border:1px solid var(--accent-line);
+  position:relative;cursor:pointer;
+  transition:background 0.35s, border-color 0.35s;
+  flex-shrink:0;
+}
+.toggle-track:hover{ border-color:var(--rose); }
+.toggle-knob{
+  position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--toggle-knob);
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  transition:transform 0.35s cubic-bezier(.34,1.56,.64,1), background 0.3s;
+}
+[data-theme="dark"] .toggle-knob{ transform:translateX(20px); }
+[data-theme="dark"] .toggle-track{ background:rgba(212,149,122,0.25); }
+
+/* ══════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════ */
+.screen{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:32px 16px;
+  z-index:10;
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0) scale(1);
+  transition:opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+.screen.hidden{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  transform:translateY(16px) scale(0.98) !important;
+}
+.screen.animating-out{
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-16px) scale(0.98);
+}
+
+/* ══════════════════════════════════════════
+   CARD BASE
+══════════════════════════════════════════ */
+.card{
+  position:relative;
+  background:var(--card);
+  backdrop-filter:blur(24px) saturate(1.5);
+  border:1px solid var(--card-border);
+  border-radius:28px;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.06) inset,
+    0 32px 80px var(--shadow1),
+    0 8px 24px var(--shadow2);
+  transition:background 0.5s, border-color 0.4s, box-shadow 0.5s;
+}
+
+/* ══════════════════════════════════════════
+   WELCOME CARD
+══════════════════════════════════════════ */
+.welcome-card{
+  width:480px;max-width:100%;
+  padding:72px 56px 60px;
+  text-align:center;
+  animation:rise 0.9s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.brand-emblem{
+  width:72px;height:72px;margin:0 auto 28px;
+  position:relative;
+}
+.emblem-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid var(--accent-line);
+  animation:spin 18s linear infinite;
+}
+.emblem-ring::before{
+  content:'';position:absolute;top:-3px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;
+  background:var(--rose);
+  box-shadow:0 0 8px var(--rose);
+}
+@keyframes spin{ to{transform:rotate(360deg);} }
+.emblem-core{
+  position:absolute;inset:8px;
+  background:var(--btn-grad);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px var(--shadow1);
+}
+.emblem-core svg{
+  width:26px;height:26px;stroke:var(--white);fill:none;
+  stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;
+}
+
+.welcome-eyebrow{
+  font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--rose);font-weight:300;margin-bottom:14px;
+  opacity:0;animation:fadein 0.7s 0.3s forwards;
+}
+.welcome-title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;font-size:2.8rem;
+  color:var(--text);letter-spacing:0.03em;line-height:1.1;
+  opacity:0;animation:fadein 0.7s 0.45s forwards;
+}
+.welcome-title em{
+  font-style:italic;font-weight:300;
+  color:var(--rose);
+}
+.welcome-sub{
+  margin-top:16px;font-size:0.82rem;font-weight:300;
+  color:var(--text-2);letter-spacing:0.06em;line-height:1.7;
+  opacity:0;animation:fadein 0.7s 0.6s forwards;
+}
+
+.welcome-divider{
+  display:flex;align-items:center;gap:16px;
+  margin:36px 0 32px;
+  opacity:0;animation:fadein 0.7s 0.7s forwards;
+}
+.welcome-divider span{
+  flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--div-line),transparent);
+}
+.welcome-divider i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--rose);opacity:0.5;font-style:normal;
+}
+
+.btn-continue{
+  opacity:0;animation:fadein 0.7s 0.8s forwards;
+  width:100%;padding:17px;
+  background:var(--btn-grad);
+  border:none;border-radius:14px;
+  color:var(--white);
+  font-family:'Jost',sans-serif;
+  font-size:0.82rem;font-weight:400;
+  letter-spacing:0.2em;text-transform:uppercase;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform 0.15s,box-shadow 0.2s;
+  box-shadow:0 4px 22px var(--shadow1);
+}
+.btn-continue::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  opacity:0;transition:opacity 0.2s;
+}
+.btn-continue:hover::before{opacity:1;}
+.btn-continue:hover{transform:translateY(-2px);box-shadow:0 10px 32px var(--shadow1);}
+.btn-continue:active{transform:translateY(0);}
+.btn-continue-inner{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;}
+.btn-continue-inner svg{
+  width:16px;height:16px;stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform 0.2s;
+}
+.btn-continue:hover .btn-continue-inner svg{transform:translateX(4px);}
+
+.welcome-footer{
+  margin-top:22px;font-size:0.68rem;
+  color:var(--text-2);letter-spacing:0.07em;
+  opacity:0;animation:fadein 0.7s 0.95s forwards;
+}
+
+/* ══════════════════════════════════════════
+   LOGIN CARD
+══════════════════════════════════════════ */
+.login-card{
+  width:440px;max-width:100%;
+  padding:52px 48px 44px;
+  overflow-y:auto;max-height:calc(100vh - 64px);
+}
+
+/* Brand */
+.brand{text-align:center;margin-bottom:32px;}
+.brand-icon{
+  width:48px;height:48px;margin:0 auto 14px;
+  background:var(--btn-grad);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px var(--shadow1);
+}
+.brand-icon svg{width:22px;height:22px;stroke:var(--white);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.brand h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.9rem;color:var(--text);letter-spacing:0.04em;line-height:1;}
+.brand p{margin-top:7px;font-size:0.73rem;color:var(--text-2);letter-spacing:0.12em;text-transform:uppercase;font-weight:300;}
+
+/* Back link */
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.70rem;letter-spacing:0.08em;color:var(--text-2);
+  text-decoration:none;margin-bottom:22px;
+  transition:color 0.2s;cursor:pointer;background:none;border:none;
+  font-family:'Jost',sans-serif;
+}
+.back-link:hover{color:var(--rose);}
+.back-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Fields */
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:0.67rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-2);margin-bottom:7px;font-weight:400;}
+.input-wrap{position:relative;}
+.input-wrap>svg{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;stroke:var(--silk);fill:none;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+  transition:stroke 0.2s;pointer-events:none;
+}
+.input-wrap:focus-within>svg{stroke:var(--rose);}
+input[type="email"],input[type="password"],input[type="text"],input[type="tel"]{
+  width:100%;padding:13px 16px 13px 42px;
+  background:var(--input-bg);border:1px solid var(--input-b);
+  border-radius:12px;font-family:'Jost',sans-serif;
+  font-size:0.87rem;font-weight:300;color:var(--text);outline:none;
+  transition:border-color 0.25s,background 0.25s,box-shadow 0.25s,color 0.3s;
+}
+input::placeholder{color:var(--text-2);opacity:0.55;}
+input:focus{border-color:var(--rose);background:rgba(255,255,255,0.07);box-shadow:0 0 0 3px rgba(196,125,125,0.12);}
+[data-theme="dark"] input:focus{background:rgba(255,255,255,0.04);}
+
+.eye-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:0;
+  display:flex;align-items:center;opacity:0.4;transition:opacity 0.2s;
+}
+.eye-toggle:hover{opacity:0.85;}
+.eye-toggle svg{position:static;transform:none;width:17px;height:17px;stroke:var(--text);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+
+.field-error{font-size:0.66rem;color:var(--err);margin-top:5px;letter-spacing:0.04em;opacity:0;transition:opacity 0.2s;}
+.field.has-error input{border-color:var(--err);}
+.field.has-error .field-error{opacity:1;}
+.field.valid input{border-color:var(--valid);}
+
+/* Remember + forgot */
+.row-meta{display:flex;align-items:center;justify-content:space-between;margin:4px 0 2px;}
+.remember-label{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;}
+.remember-label input[type="checkbox"]{display:none;}
+.check-box{
+  width:17px;height:17px;flex-shrink:0;
+  border:1.5px solid var(--chk-b);border-radius:5px;
+  background:var(--chk-bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s,border-color 0.2s,box-shadow 0.2s;
+}
+.check-box svg{width:10px;height:10px;stroke:var(--white);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(0.5);transition:opacity 0.15s,transform 0.15s;}
+.remember-label input[type="checkbox"]:checked~.check-box{background:var(--rose);border-color:var(--rose);box-shadow:0 2px 8px rgba(196,125,125,0.35);}
+.remember-label input[type="checkbox"]:checked~.check-box svg{opacity:1;transform:scale(1);}
+.remember-text{font-size:0.72rem;color:var(--text-2);font-weight:300;line-height:1.2;}
+.remember-text span{display:block;font-size:0.60rem;color:var(--text-2);opacity:0.65;letter-spacing:0.02em;}
+.forgot{font-size:0.71rem;color:var(--text-2);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s;white-space:nowrap;}
+.forgot:hover{color:var(--rose);}
+
+/* Primary button */
+.btn-primary{
+  margin-top:20px;width:100%;padding:15px;
+  background:var(--btn-grad);
+  border:none;border-radius:12px;color:var(--white);
+  font-family:'Jost',sans-serif;font-size:0.82rem;font-weight:400;
+  letter-spacing:0.18em;text-transform:uppercase;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform 0.15s,box-shadow 0.2s;
+  box-shadow:0 4px 20px var(--shadow1);
+}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.16),transparent);opacity:0;transition:opacity 0.2s;}
+.btn-primary:hover::before{opacity:1;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 28px var(--shadow1);}
+.btn-primary:active{transform:translateY(1px);}
+.btn-inner{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-inner svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform 0.2s;}
+.btn-primary:hover .btn-inner svg{transform:translateX(3px);}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:14px;margin:22px 0 18px;}
+.divider span{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--div-line),transparent);}
+.divider em{font-style:normal;font-size:0.66rem;letter-spacing:0.12em;color:var(--text-2);text-transform:uppercase;}
+
+/* Alt buttons */
+.alt-btns{display:flex;flex-direction:column;gap:10px;}
+.btn-alt{
+  width:100%;padding:12px 18px;
+  background:var(--alt-bg);border:1px solid var(--alt-b);border-radius:12px;
+  display:flex;align-items:center;gap:14px;cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:0.82rem;font-weight:300;
+  color:var(--text);letter-spacing:0.03em;
+  transition:background 0.2s,border-color 0.2s,transform 0.15s,box-shadow 0.2s;
+}
+.btn-alt:hover{background:var(--alt-bg-h);border-color:var(--alt-b-h);transform:translateY(-1px);box-shadow:0 6px 18px var(--shadow2);}
+.btn-alt:active{transform:translateY(0);}
+.btn-alt-icon{width:32px;height:32px;flex-shrink:0;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.btn-alt-icon.google{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.14);}
+.btn-alt-icon.phone{background:var(--btn-grad);}
+.btn-alt-icon.phone svg{stroke:white;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.btn-alt-label{flex:1;}
+.btn-alt-label strong{display:block;font-weight:400;}
+.btn-alt-label small{font-size:0.65rem;color:var(--text-2);letter-spacing:0.04em;font-weight:300;}
+.btn-alt-arrow{opacity:0.3;transition:opacity 0.2s,transform 0.2s;stroke:var(--text);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.btn-alt:hover .btn-alt-arrow{opacity:0.7;transform:translateX(3px);}
+
+/* Phone panel */
+.phone-panel{overflow:hidden;max-height:0;opacity:0;transition:max-height 0.4s cubic-bezier(.22,.68,0,1.1),opacity 0.3s;}
+.phone-panel.open{max-height:120px;opacity:1;}
+.phone-inner{padding-top:12px;}
+.phone-row{display:flex;gap:8px;}
+.phone-row select{
+  width:88px;flex-shrink:0;padding:13px 8px;
+  background:var(--input-bg);border:1px solid var(--input-b);
+  border-radius:12px;font-family:'Jost',sans-serif;font-size:0.82rem;font-weight:300;
+  color:var(--text);outline:none;cursor:pointer;transition:border-color 0.2s,background 0.3s,color 0.3s;
+}
+.phone-row select:focus{border-color:var(--rose);}
+.phone-row .input-wrap{flex:1;}
+.phone-row input{padding-left:38px;}
+
+/* Sign up */
+.signup{margin-top:22px;text-align:center;font-size:0.75rem;color:var(--text-2);font-weight:300;}
+.signup a{color:var(--rose-d);text-decoration:none;font-weight:400;transition:color 0.2s;}
+.signup a:hover{color:var(--rose);text-decoration:underline;}
+
+/* Animations */
+@keyframes rise{
+  from{opacity:0;transform:translateY(28px) scale(0.97);}
+  to  {opacity:1;transform:translateY(0)    scale(1);   }
+}
+@keyframes fadein{
+  from{opacity:0;transform:translateY(8px);}
+  to  {opacity:1;transform:translateY(0);  }
+}
+
+/* scrollbar in dark */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--accent-line);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-layer bg-silk"></div>
+<div class="bg-layer bg-blobs"></div>
+<div class="bg-layer bg-metal"></div>
+<div class="bg-layer bg-metal-glow"></div>
+
+<!-- Dark mode toggle -->
+<div class="toggle-wrap" id="toggle-wrap">
+  <span class="toggle-label" id="toggle-lbl">Light</span>
+  <div class="toggle-track" id="toggle-track" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle dark mode">
+    <div class="toggle-knob"></div>
+  </div>
+</div>
+
+<!-- ══ WELCOME SCREEN ══ -->
+<div class="screen" id="screen-welcome">
+  <div class="card welcome-card">
+
+    <div class="brand-emblem">
+      <div class="emblem-ring"></div>
+      <div class="emblem-core">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      </div>
+    </div>
+
+    <div class="welcome-eyebrow">Est. 2024 &nbsp;·&nbsp; Excellence in every detail</div>
+
+    <h1 class="welcome-title">
+      Welcome to<br><em>Param Enterprises</em>
+    </h1>
+
+    <p class="welcome-sub">
+      A premier platform crafted for those who<br>
+      expect nothing less than extraordinary.
+    </p>
+
+    <div class="welcome-divider">
+      <span></span><i></i><span></span>
+    </div>
+
+    <button class="btn-continue" id="btn-continue">
+      <span class="btn-continue-inner">
+        Continue
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </button>
+
+    <p class="welcome-footer">Secure · Trusted · Private</p>
+
+  </div>
+</div>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div class="screen hidden" id="screen-login">
+  <div class="card login-card">
+
+    <button class="back-link" id="btn-back">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to welcome
+    </button>
+
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <h1>Welcome back</h1>
+      <p>Sign in to continue</p>
+    </div>
+
+    <div class="field" id="field-email">
+      <label for="email">Email address</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 7 10-7"/></svg>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+      <div class="field-error" id="email-error">Please enter a valid email address.</div>
+    </div>
+
+    <div class="field" id="field-password">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+        <button class="eye-toggle" type="button" id="eye-toggle" aria-label="Toggle password visibility">
+          <svg id="eye-icon" viewBox="0 0 24 24"><path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="field-error" id="password-error">Password must be at least 6 characters.</div>
+    </div>
+
+    <div class="row-meta">
+      <label class="remember-label">
+        <input type="checkbox" id="remember"/>
+        <span class="check-box">
+          <svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>
+        </span>
+        <span class="remember-text">
+          Remember me
+          <span>Stay signed in for 30 days</span>
+        </span>
+      </label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <button class="btn-primary" id="next-btn" type="button">
+      <span class="btn-inner">
+        Next
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </span>
+    </button>
+
+    <div class="divider"><span></span><em>or continue with</em><span></span></div>
+
+    <div class="alt-btns">
+      <button class="btn-alt" id="btn-google" type="button">
+        <div class="btn-alt-icon google">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+        </div>
+        <div class="btn-alt-label">
+          <strong>Continue with Google</strong>
+          <small>Use your Google account</small>
+        </div>
+        <svg class="btn-alt-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <button class="btn-alt" id="btn-phone" type="button">
+        <div class="btn-alt-icon phone">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="btn-alt-label">
+          <strong id="phone-btn-label">Continue with Phone</strong>
+          <small>Get a one-time code via SMS</small>
+        </div>
+        <svg class="btn-alt-arrow" id="phone-arrow" width="16" height="16" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- Phone panel -->
+    <div class="phone-panel" id="phone-panel">
+      <div class="phone-inner">
+        <div class="phone-row">
+          <select id="phone-code" aria-label="Country code">
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+91">🇮🇳 +91</option>
+            <option value="+61">🇦🇺 +61</option>
+            <option value="+49">🇩🇪 +49</option>
+            <option value="+33">🇫🇷 +33</option>
+            <option value="+81">🇯🇵 +81</option>
+            <option value="+86">🇨🇳 +86</option>
+            <option value="+55">🇧🇷 +55</option>
+          </select>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <input type="tel" id="phone-number" placeholder="Phone number"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signup">Don't have an account? <a href="#">Create one</a></div>
+
+  </div>
+</div>
+
+<script>
+  /* ── Dark mode toggle ── */
+  const html       = document.documentElement;
+  const track      = document.getElementById('toggle-track');
+  const lbl        = document.getElementById('toggle-lbl');
+  let dark         = false;
+
+  function setTheme(d){
+    dark = d;
+    html.setAttribute('data-theme', d ? 'dark' : 'light');
+    lbl.textContent = d ? 'Dark' : 'Light';
+    track.setAttribute('aria-checked', d);
+  }
+
+  track.addEventListener('click', () => setTheme(!dark));
+  track.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){ e.preventDefault(); setTheme(!dark); }});
+
+  /* ── Screen transitions ── */
+  const welcome = document.getElementById('screen-welcome');
+  const login   = document.getElementById('screen-login');
+
+  function goTo(from, to) {
+    from.classList.add('animating-out');
+    setTimeout(() => {
+      from.classList.remove('animating-out');
+      from.classList.add('hidden');
+      to.classList.remove('hidden');
+      // Force reflow so transition triggers
+      void to.offsetHeight;
+    }, 380);
+  }
+
+  document.getElementById('btn-continue').addEventListener('click', () => goTo(welcome, login));
+  document.getElementById('btn-back').addEventListener('click',     () => goTo(login, welcome));
+
+  /* ── Eye toggle ── */
+  const passwordInput = document.getElementById('password');
+  const eyeToggle     = document.getElementById('eye-toggle');
+  const eyeIcon       = document.getElementById('eye-icon');
+
+  eyeToggle.addEventListener('click', () => {
+    const isPass = passwordInput.type === 'password';
+    passwordInput.type = isPass ? 'text' : 'password';
+    eyeIcon.innerHTML = isPass
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20C5 20 1 12 1 12a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
+  /* ── Validation ── */
+  const emailInput    = document.getElementById('email');
+  const fieldEmail    = document.getElementById('field-email');
+  const fieldPassword = document.getElementById('field-password');
+  const emailError    = document.getElementById('email-error');
+  const passwordError = document.getElementById('password-error');
+  const nextBtn       = document.getElementById('next-btn');
+
+  function validateEmail(){
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+    fieldEmail.classList.toggle('has-error', !!emailInput.value && !ok);
+    fieldEmail.classList.toggle('valid', ok);
+    return ok;
+  }
+  function validatePassword(){
+    const ok = passwordInput.value.length >= 6;
+    fieldPassword.classList.toggle('has-error', !!passwordInput.value && !ok);
+    fieldPassword.classList.toggle('valid', ok);
+    return ok;
+  }
+  emailInput.addEventListener('input', validateEmail);
+  passwordInput.addEventListener('input', validatePassword);
+
+  nextBtn.addEventListener('click', () => {
+    const eOk = validateEmail();
+    const pOk = validatePassword();
+    if(!emailInput.value)    { fieldEmail.classList.add('has-error');    emailError.textContent='Email is required.'; }
+    if(!passwordInput.value) { fieldPassword.classList.add('has-error'); passwordError.textContent='Password is required.'; }
+    if(eOk && pOk){
+      const inner = nextBtn.querySelector('.btn-inner');
+      inner.innerHTML = '✓ &nbsp;Continuing…';
+      nextBtn.style.background = 'linear-gradient(135deg,#70a870,#559055)';
+      nextBtn.style.boxShadow  = '0 4px 20px rgba(85,144,85,0.40)';
+      const theme = document.documentElement.getAttribute('data-theme') || 'light';
+      setTimeout(() => {
+        const emailVal = document.getElementById('email').value.trim();
+        sessionStorage.setItem('pe_user_email', emailVal);
+        sessionStorage.setItem('pe_theme', theme);
+        window.location.href = 'dashboard.html';
+      }, 700);
+    }
+  });
+
+  /* ── Google ── */
+  document.getElementById('btn-google').addEventListener('click', function(){
+    const lbl = this.querySelector('.btn-alt-label strong');
+    this.style.borderColor='rgba(66,133,244,0.5)';
+    this.style.background='rgba(240,245,255,0.1)';
+    lbl.textContent='Redirecting to Google…';
+    setTimeout(()=>{ this.style.borderColor=''; this.style.background=''; lbl.textContent='Continue with Google'; },2000);
+  });
+
+  /* ── Phone toggle ── */
+  const btnPhone      = document.getElementById('btn-phone');
+  const phonePanel    = document.getElementById('phone-panel');
+  const phoneBtnLabel = document.getElementById('phone-btn-label');
+  const phoneArrow    = document.getElementById('phone-arrow');
+
+  btnPhone.addEventListener('click', () => {
+    const open = phonePanel.classList.toggle('open');
+    phoneBtnLabel.textContent = open ? 'Enter your number below' : 'Continue with Phone';
+    phoneArrow.style.transform = open ? 'rotate(90deg)' : '';
+    if(open) document.getElementById('phone-number').focus();
+  });
+</script>
+</body>
+</html>
