@@ -734,7 +734,10 @@ input:focus{border-color:var(--rose);background:rgba(255,255,255,0.07);box-shado
       nextBtn.style.boxShadow  = '0 4px 20px rgba(85,144,85,0.40)';
       const theme = document.documentElement.getAttribute('data-theme') || 'light';
       setTimeout(() => {
-        window.location.href = 'dashboard.html?theme=' + theme;
+        const emailVal = document.getElementById('email').value.trim();
+        sessionStorage.setItem('pe_user_email', emailVal);
+        sessionStorage.setItem('pe_theme', theme);
+        window.location.href = 'dashboard.html';
       }, 700);
     }
   });
