@@ -94,17 +94,56 @@ body{
   transition:opacity 0.5s;
 }
 
+/* ── faded background photo ── */
+.bg-photo{
+  /* Colourful posters / creative wall — light mode */
+  background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  filter: saturate(1.4) brightness(1.05);
+  transform: scale(1.04);
+  transition: opacity 0.6s, filter 0.6s;
+}
+/* colour tint overlay on top of photo for light mode */
+.bg-photo::after{
+  content:'';
+  position:absolute;inset:0;
+  background: linear-gradient(
+    135deg,
+    rgba(247,232,232,0.55) 0%,
+    rgba(240,210,210,0.35) 50%,
+    rgba(247,232,232,0.55) 100%
+  );
+  pointer-events:none;
+}
+[data-theme="dark"] .bg-photo{
+  /* Dark neon poster / print studio — dark mode */
+  background-image: url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1800&q=80&auto=format&fit=crop');
+  opacity: 0.38;
+  filter: saturate(0.8) brightness(0.35);
+}
+[data-theme="dark"] .bg-photo::after{
+  background: linear-gradient(
+    135deg,
+    rgba(10,15,30,0.72) 0%,
+    rgba(15,20,40,0.55) 50%,
+    rgba(10,15,30,0.72) 100%
+  );
+}
+
 /* light: silk weave */
 .bg-silk{
   background:
-    repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,0.18) 40px,rgba(255,255,255,0.18) 41px),
-    repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.12) 40px,rgba(255,255,255,0.12) 41px);
+    repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,0.08) 40px,rgba(255,255,255,0.08) 41px),
+    repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.05) 40px,rgba(255,255,255,0.05) 41px);
 }
 .bg-blobs{
   background:
-    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(255,200,200,0.45) 0%,transparent 70%),
-    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(230,160,160,0.30) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 40% at 55% 20%,rgba(255,230,230,0.50) 0%,transparent 60%);
+    radial-gradient(ellipse 60% 50% at 20% 30%,rgba(255,200,200,0.20) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 70%,rgba(230,160,160,0.15) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 40% at 55% 20%,rgba(255,230,230,0.18) 0%,transparent 60%);
 }
 
 /* dark: brushed-metal grid */
@@ -483,6 +522,7 @@ input:focus{border-color:var(--rose);background:rgba(255,255,255,0.07);box-shado
 <body>
 
 <!-- Background layers -->
+<div class="bg-layer bg-photo"></div>
 <div class="bg-layer bg-silk"></div>
 <div class="bg-layer bg-blobs"></div>
 <div class="bg-layer bg-metal"></div>
