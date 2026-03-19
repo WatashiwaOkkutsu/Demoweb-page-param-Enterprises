@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Previous Orders — Param Enterprises</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7e8e8;--rose:#c47d7d;--rose-d:#9e5a5a;
+  --text:#5a3a3a;--text-2:#9e7a7a;--white:#fff9f9;
+  --card:rgba(255,249,249,0.75);--border:rgba(255,255,255,0.75);
+  --shadow:rgba(160,90,90,0.12);--div-line:rgba(196,125,125,0.22);
+  --btn-grad:linear-gradient(135deg,#d49090,#c47d7d,#b06060);
+}
+[data-theme="dark"]{
+  --bg:#0e0f11;--rose:#7aa3d4;--rose-d:#5580b8;
+  --text:#d8e4f0;--text-2:#7a92aa;--white:#e8f0f8;
+  --card:rgba(18,22,32,0.85);--border:rgba(100,140,220,0.12);
+  --shadow:rgba(0,0,0,0.5);--div-line:rgba(100,140,220,0.15);
+  --btn-grad:linear-gradient(135deg,#2a4a7a,#1e3a6a,#142850);
+}
+html,body{min-height:100%;font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);transition:background 0.5s,color 0.4s;}
+.bg-silk{position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,0.08) 40px,rgba(255,255,255,0.08) 41px);transition:opacity 0.5s;}
+.bg-blobs{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 20% 30%,rgba(255,200,200,0.20) 0%,transparent 70%);transition:opacity 0.5s;}
+.bg-metal{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse 70% 50% at 20% 20%,rgba(30,60,120,0.25) 0%,transparent 65%);transition:opacity 0.5s;}
+[data-theme="dark"] .bg-silk{opacity:0.3;}[data-theme="dark"] .bg-blobs{opacity:0;}[data-theme="dark"] .bg-metal{opacity:1;}
+
+.toggle-wrap{position:fixed;top:20px;right:22px;z-index:100;display:flex;align-items:center;gap:9px;}
+.toggle-label{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);font-weight:300;user-select:none;}
+.toggle-track{width:44px;height:24px;border-radius:12px;background:rgba(196,125,125,0.18);border:1px solid var(--div-line);position:relative;cursor:pointer;transition:background 0.3s;flex-shrink:0;}
+.toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--rose);box-shadow:0 2px 6px rgba(0,0,0,0.25);transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);}
+[data-theme="dark"] .toggle-knob{transform:translateX(20px);}[data-theme="dark"] .toggle-track{background:rgba(100,140,220,0.2);}
+
+.page{position:relative;z-index:10;max-width:860px;margin:0 auto;padding:32px 20px 60px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:var(--card);border:1px solid var(--div-line);border-radius:12px;font-family:'Jost',sans-serif;font-size:0.72rem;font-weight:300;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);cursor:pointer;text-decoration:none;transition:border-color 0.2s,color 0.2s;margin-bottom:28px;backdrop-filter:blur(10px);}
+.back-btn:hover{border-color:var(--rose);color:var(--rose);}
+.back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+.page-header{margin-bottom:28px;}
+.page-eyebrow{font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--rose);font-weight:300;margin-bottom:8px;}
+.page-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2rem;color:var(--text);letter-spacing:0.03em;}
+.page-title em{font-style:italic;color:var(--rose);}
+.page-sub{font-size:0.78rem;color:var(--text-2);font-weight:300;margin-top:6px;}
+
+/* stats */
+.stats-row{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap;}
+.stat-box{flex:1;min-width:110px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 18px;backdrop-filter:blur(12px);text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--text);}
+.stat-lbl{font-size:0.60rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-2);font-weight:300;margin-top:2px;}
+
+/* search */
+.search-wrap{position:relative;margin-bottom:20px;}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--text-2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.search-input{width:100%;padding:12px 16px 12px 44px;background:var(--card);border:1px solid var(--div-line);border-radius:12px;font-family:'Jost',sans-serif;font-size:0.85rem;font-weight:300;color:var(--text);outline:none;transition:border-color 0.2s;backdrop-filter:blur(10px);}
+.search-input:focus{border-color:var(--rose);}
+.search-input::placeholder{color:var(--text-2);opacity:0.6;}
+
+/* year group */
+.year-group{margin-bottom:28px;}
+.year-label{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:var(--text-2);letter-spacing:0.06em;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.year-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--div-line),transparent);}
+
+/* history table style cards */
+.hist-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:10px;backdrop-filter:blur(12px);display:flex;align-items:center;gap:16px;transition:transform 0.2s,box-shadow 0.2s;animation:rise 0.4s ease both;}
+.hist-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px var(--shadow);}
+@keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.hist-thumb{width:50px;height:50px;border-radius:10px;background:var(--div-line);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.hist-thumb svg{width:20px;height:20px;stroke:var(--text-2);fill:none;stroke-width:1.4;stroke-linecap:round;}
+.hist-info{flex:1;min-width:0;}
+.hist-name{font-size:0.88rem;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-meta{font-size:0.65rem;color:var(--text-2);margin-top:3px;letter-spacing:0.03em;}
+.hist-right{text-align:right;flex-shrink:0;}
+.hist-amount{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--text);}
+.hist-date{font-size:0.62rem;color:var(--text-2);margin-top:2px;}
+.hist-status{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:20px;margin-top:4px;display:inline-block;background:rgba(60,190,100,0.12);color:#50c878;border:1px solid rgba(60,190,100,0.25);}
+</style>
+</head>
+<body>
+<div class="bg-silk"></div><div class="bg-blobs"></div><div class="bg-metal"></div>
+
+<div class="toggle-wrap">
+  <span class="toggle-label" id="toggle-lbl">Light</span>
+  <div class="toggle-track" id="toggle-track" tabindex="0"><div class="toggle-knob"></div></div>
+</div>
+
+<div class="page">
+  <a class="back-btn" href="dashboard.html">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Dashboard
+  </a>
+
+  <div class="page-header">
+    <div class="page-eyebrow">Param Enterprises</div>
+    <h1 class="page-title">Previous <em>Orders</em></h1>
+    <p class="page-sub">Your complete order history with Param Enterprises</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">18</div><div class="stat-lbl">Total Orders</div></div>
+    <div class="stat-box"><div class="stat-num">₹28,450</div><div class="stat-lbl">Total Spent</div></div>
+    <div class="stat-box"><div class="stat-num">54</div><div class="stat-lbl">Posters Bought</div></div>
+    <div class="stat-box"><div class="stat-num">4.8 ★</div><div class="stat-lbl">Avg Rating</div></div>
+  </div>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="search-input" type="text" id="search-input" placeholder="Search by order name or ID…"/>
+  </div>
+
+  <div id="history-list">
+
+    <div class="year-group">
+      <div class="year-label">2025</div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Golden Hour Poster Set</div>
+          <div class="hist-meta">Order #PE-20180 &nbsp;·&nbsp; 24×36 in &nbsp;·&nbsp; Qty 2 &nbsp;·&nbsp; Gloss</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹2,800</div>
+          <div class="hist-date">28 Feb 2025</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Retro Wave Collection</div>
+          <div class="hist-meta">Order #PE-20155 &nbsp;·&nbsp; A1 Size &nbsp;·&nbsp; Qty 3 &nbsp;·&nbsp; Matte</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹3,150</div>
+          <div class="hist-date">14 Feb 2025</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Desert Wind Art Print</div>
+          <div class="hist-meta">Order #PE-20122 &nbsp;·&nbsp; 18×24 in &nbsp;·&nbsp; Qty 1 &nbsp;·&nbsp; Satin</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹950</div>
+          <div class="hist-date">3 Jan 2025</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2024</div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Bloom Festival Prints</div>
+          <div class="hist-meta">Order #PE-19988 &nbsp;·&nbsp; A2 Size &nbsp;·&nbsp; Qty 4 &nbsp;·&nbsp; Gloss</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹4,400</div>
+          <div class="hist-date">18 Nov 2024</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">City Nights Panoramic</div>
+          <div class="hist-meta">Order #PE-19870 &nbsp;·&nbsp; 30×40 cm &nbsp;·&nbsp; Qty 2 &nbsp;·&nbsp; Matte</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹2,200</div>
+          <div class="hist-date">5 Sep 2024</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Ocean Drift Series</div>
+          <div class="hist-meta">Order #PE-19744 &nbsp;·&nbsp; 16×20 in &nbsp;·&nbsp; Qty 3 &nbsp;·&nbsp; Satin</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹3,600</div>
+          <div class="hist-date">22 Jul 2024</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+
+      <div class="hist-card">
+        <div class="hist-thumb"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div class="hist-info">
+          <div class="hist-name">Mountain Glow Landscape</div>
+          <div class="hist-meta">Order #PE-19601 &nbsp;·&nbsp; 50×70 cm &nbsp;·&nbsp; Qty 1 &nbsp;·&nbsp; Canvas</div>
+        </div>
+        <div class="hist-right">
+          <div class="hist-amount">₹1,850</div>
+          <div class="hist-date">10 Apr 2024</div>
+          <span class="hist-status">Delivered</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const html=document.documentElement,track=document.getElementById('toggle-track'),lbl=document.getElementById('toggle-lbl');
+  let dark=(sessionStorage.getItem('pe_theme')||'light')==='dark';
+  function setTheme(d){dark=d;html.setAttribute('data-theme',d?'dark':'light');lbl.textContent=d?'Dark':'Light';}
+  setTheme(dark);
+  track.addEventListener('click',()=>setTheme(!dark));
+
+  // live search
+  document.getElementById('search-input').addEventListener('input',function(){
+    const q=this.value.toLowerCase();
+    document.querySelectorAll('.hist-card').forEach(card=>{
+      card.style.display=card.textContent.toLowerCase().includes(q)?'flex':'none';
+    });
+  });
+</script>
+</body>
+</html>
